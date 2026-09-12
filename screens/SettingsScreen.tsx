@@ -30,7 +30,7 @@ export default function SettingsScreen() {
 
         <View style={styles.card}>
           <Text style={styles.label}>APPEARANCE</Text>
-          <Text style={styles.hint}>Choose how the Gymcom app looks.</Text>
+          <Text style={styles.hint}>Choose how the GymCom app looks.</Text>
           <View style={styles.optionRow}>
             {(['dark', 'light'] as ThemeMode[]).map((id) => {
               const active = mode === id;
@@ -113,7 +113,7 @@ const makeStyles = (colors: ReturnType<typeof useThemeMode>['colors']) =>
       paddingVertical: 12,
       paddingHorizontal: 12,
     },
-    optionActive: { borderColor: colors.primary, backgroundColor: 'rgba(233,193,118,0.08)' },
+    optionActive: { borderColor: colors.primary, backgroundColor: 'rgba(244,167,44,0.08)' },
     checkbox: {
       width: 20,
       height: 20,

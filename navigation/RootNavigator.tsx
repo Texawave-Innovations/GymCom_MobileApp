@@ -1,14 +1,15 @@
 import { useEffect, useRef, useState } from 'react';
-import { Animated, PanResponder, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, PanResponder, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialIcons } from '@expo/vector-icons';
-import { darkColors, typography, radius } from '../theme';
+import { BlurView } from 'expo-blur';
+import { LinearGradient } from 'expo-linear-gradient';
+import { typography, radius } from '../theme';
+import { useThemeMode } from '../hooks/useThemeMode';
 
 import HomeScreen from '../screens/HomeScreen';
-import LegendsScreen from '../screens/LegendsScreen';
 import WorkoutsScreen from '../screens/WorkoutsScreen';
-import LegendProfileScreen from '../screens/LegendProfileScreen';
 import WorkoutSplitScreen from '../screens/WorkoutSplitScreen';
 import ArnoldSplitScreen from '../screens/ArnoldSplitScreen';
 import MentzerSplitScreen from '../screens/MentzerSplitScreen';
@@ -17,19 +18,25 @@ import LevroneSplitScreen from '../screens/LevroneSplitScreen';
 import CircuitSplitScreen from '../screens/CircuitSplitScreen';
 import WorkoutExecutionScreen from '../screens/WorkoutExecutionScreen';
 import SettingsScreen from '../screens/SettingsScreen';
-import ProgressScreen from '../screens/ProgressScreen';
+import UtilitiesScreen from '../screens/UtilitiesScreen';
+import TipsScreen from '../screens/TipsScreen';
+import BmiScreen from '../screens/calculators/BmiScreen';
+import BodyFatScreen from '../screens/calculators/BodyFatScreen';
+import ProteinScreen from '../screens/calculators/ProteinScreen';
+import CalorieScreen from '../screens/calculators/CalorieScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 const TAB_ICONS: Record<string, keyof typeof MaterialIcons.glyphMap> = {
   Home: 'home',
-  Legends: 'military-tech',
   Workouts: 'fitness-center',
-  Progress: 'monitor',
+  Utilities: 'calculate',
+  Tips: 'lightbulb',
 };
 
-function TabSlot({ route, isActive, onPress, label, scale }: any) {
+function TabSlot({ route, isActive, onPress, label, scale, activeColor, inactiveColor }: any) {
+  const color = isActive ? activeColor : inactiveColor;
   return (
     <TouchableOpacity
       accessibilityRole="button"
@@ -39,13 +46,9 @@ function TabSlot({ route, isActive, onPress, label, scale }: any) {
       style={navStyles.tabSlot}
     >
       <Animated.View style={[navStyles.tabSlotInner, isActive ? { transform: [{ scale }] } : null]}>
-        <MaterialIcons
-          name={TAB_ICONS[route.name]}
-          color={isActive ? darkColors.charcoal : darkColors.secondary}
-          size={20}
-        />
+        <MaterialIcons name={TAB_ICONS[route.name]} color={color} size={20} />
         <Text
-          style={isActive ? navStyles.labelActive : navStyles.labelInactive}
+          style={[navStyles.label, { color }]}
           numberOfLines={1}
           adjustsFontSizeToFit
           minimumFontScale={0.75}
@@ -58,6 +61,18 @@ function TabSlot({ route, isActive, onPress, label, scale }: any) {
 }
 
 function FloatingTabBar({ state, descriptors, navigation }: any) {
+  const { mode, colors } = useThemeMode();
+  const isDark = mode === 'dark';
+  const glass = {
+    tint: isDark ? 'rgba(16,16,16,0.28)' : 'rgba(255,255,255,0.34)',
+    rim: isDark ? 'rgba(255,255,255,0.22)' : 'rgba(255,255,255,0.95)',
+    sheenTop: isDark ? 'rgba(255,255,255,0.28)' : 'rgba(255,255,255,0.95)',
+    pillFill: isDark ? 'rgba(255,255,255,0.16)' : 'rgba(255,255,255,0.62)',
+    pillRim: isDark ? 'rgba(255,255,255,0.30)' : 'rgba(255,255,255,0.9)',
+    pillSheen: isDark ? 'rgba(255,255,255,0.24)' : 'rgba(255,255,255,0.95)',
+    activeColor: colors.primary,
+    inactiveColor: isDark ? colors.secondary : colors.onSurfaceVariant,
+  };
   const routeCount = state.routes.length;
   const [barWidth, setBarWidth] = useState(0);
   const slotWidth = barWidth / routeCount || 0;
@@ -116,39 +131,72 @@ function FloatingTabBar({ state, descriptors, navigation }: any) {
 
   return (
     <View style={navStyles.barWrapper} pointerEvents="box-none">
-      <View
-        style={navStyles.bar}
-        onLayout={(e) => setBarWidth(e.nativeEvent.layout.width)}
-        {...panResponder.panHandlers}
-      >
-        {barWidth > 0 && (
-          <Animated.View
-            pointerEvents="none"
-            style={[
-              navStyles.pill,
-              {
-                width: slotWidth,
-                transform: [{ translateX: pillX }, { scale: pillScale }],
-              },
-            ]}
+      <View style={navStyles.barShadow}>
+        <View
+          style={[navStyles.bar, { borderColor: glass.rim }]}
+          onLayout={(e) => setBarWidth(e.nativeEvent.layout.width)}
+          {...panResponder.panHandlers}
+        >
+          <BlurView
+            tint={isDark ? 'dark' : 'light'}
+            intensity={60}
+            experimentalBlurMethod="dimezisBlurView"
+            style={StyleSheet.absoluteFill}
           />
-        )}
-        {state.routes.map((route: any, index: number) => {
-          const { options } = descriptors[route.key];
-          const isActive = state.index === index;
-          const label = (options.tabBarLabel ?? options.title ?? route.name).toString().toUpperCase();
+          <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: glass.tint }]} />
+          <LinearGradient
+            pointerEvents="none"
+            colors={[glass.sheenTop, 'transparent']}
+            style={navStyles.sheen}
+          />
 
-          return (
-            <TabSlot
-              key={route.key}
-              route={route}
-              isActive={isActive}
-              onPress={() => navigateToIndex(index)}
-              label={label}
-              scale={pillScale}
-            />
-          );
-        })}
+          {barWidth > 0 && (
+            <Animated.View
+              pointerEvents="none"
+              style={[
+                navStyles.pill,
+                {
+                  width: slotWidth - 10,
+                  backgroundColor: glass.pillFill,
+                  borderColor: glass.pillRim,
+                  shadowColor: isDark ? '#000' : '#7c6a48',
+                  transform: [{ translateX: pillX }, { scale: pillScale }],
+                },
+              ]}
+            >
+              <BlurView
+                tint={isDark ? 'light' : 'light'}
+                intensity={isDark ? 24 : 40}
+                experimentalBlurMethod="dimezisBlurView"
+                style={[StyleSheet.absoluteFill, { borderRadius: navStyles.pill.borderRadius }]}
+              />
+              <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: glass.pillFill, borderRadius: navStyles.pill.borderRadius }]} />
+              <LinearGradient
+                pointerEvents="none"
+                colors={[glass.pillSheen, 'transparent']}
+                style={navStyles.pillSheen}
+              />
+            </Animated.View>
+          )}
+          {state.routes.map((route: any, index: number) => {
+            const { options } = descriptors[route.key];
+            const isActive = state.index === index;
+            const label = (options.tabBarLabel ?? options.title ?? route.name).toString().toUpperCase();
+
+            return (
+              <TabSlot
+                key={route.key}
+                route={route}
+                isActive={isActive}
+                onPress={() => navigateToIndex(index)}
+                label={label}
+                scale={pillScale}
+                activeColor={glass.activeColor}
+                inactiveColor={glass.inactiveColor}
+              />
+            );
+          })}
+        </View>
       </View>
     </View>
   );
@@ -162,30 +210,53 @@ const navStyles = {
     right: 0,
     alignItems: 'center' as const,
   },
+  barShadow: {
+    width: '92%' as const,
+    maxWidth: 400,
+    borderRadius: radius.pill,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.28,
+    shadowRadius: 24,
+    elevation: 14,
+  },
   bar: {
     flexDirection: 'row' as const,
     alignItems: 'center' as const,
-    width: '92%' as const,
-    maxWidth: 400,
+    width: '100%' as const,
     height: 80,
     paddingVertical: 6,
-    paddingHorizontal: 0,
     borderRadius: radius.pill,
-    backgroundColor: darkColors.charcoal,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.35,
-    shadowRadius: 16,
-    elevation: 12,
+    borderWidth: 1.5,
+    backgroundColor: 'transparent',
     overflow: 'hidden' as const,
+  },
+  sheen: {
+    position: 'absolute' as const,
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 34,
   },
   pill: {
     position: 'absolute' as const,
+    left: 5,
+    top: 4,
+    bottom: 4,
+    borderRadius: 26,
+    borderWidth: 1,
+    overflow: 'hidden' as const,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.22,
+    shadowRadius: 10,
+    elevation: 6,
+  },
+  pillSheen: {
+    position: 'absolute' as const,
+    top: 0,
     left: 0,
-    top: 6,
-    bottom: 6,
-    borderRadius: radius.pill,
-    backgroundColor: darkColors.primary,
+    right: 0,
+    height: 22,
   },
   tabSlot: {
     flex: 1,
@@ -199,8 +270,7 @@ const navStyles = {
     justifyContent: 'center' as const,
     gap: 3,
   },
-  labelActive: { ...typography.labelCaps, fontSize: 8.5, letterSpacing: 0.6, color: darkColors.charcoal, textAlign: 'center' as const, width: '100%' as const },
-  labelInactive: { ...typography.labelCaps, fontSize: 8.5, letterSpacing: 0.6, color: darkColors.secondary, textAlign: 'center' as const, width: '100%' as const },
+  label: { ...typography.labelCaps, fontSize: 8.5, letterSpacing: 0.6, textAlign: 'center' as const, width: '100%' as const },
 };
 
 function Tabs() {
@@ -210,9 +280,9 @@ function Tabs() {
       screenOptions={{ headerShown: false }}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Legends" component={LegendsScreen} />
       <Tab.Screen name="Workouts" component={WorkoutsScreen} />
-      <Tab.Screen name="Progress" component={ProgressScreen} />
+      <Tab.Screen name="Utilities" component={UtilitiesScreen} />
+      <Tab.Screen name="Tips" component={TipsScreen} />
     </Tab.Navigator>
   );
 }
@@ -221,7 +291,6 @@ export default function RootNavigator() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Tabs" component={Tabs} />
-      <Stack.Screen name="LegendProfile" component={LegendProfileScreen} />
       <Stack.Screen name="WorkoutSplit" component={WorkoutSplitScreen} />
       <Stack.Screen name="ArnoldSplit" component={ArnoldSplitScreen} />
       <Stack.Screen name="MentzerSplit" component={MentzerSplitScreen} />
@@ -230,6 +299,10 @@ export default function RootNavigator() {
       <Stack.Screen name="CircuitSplit" component={CircuitSplitScreen} />
       <Stack.Screen name="WorkoutExecution" component={WorkoutExecutionScreen} />
       <Stack.Screen name="Settings" component={SettingsScreen} />
+      <Stack.Screen name="BmiCalc" component={BmiScreen} />
+      <Stack.Screen name="BodyFatCalc" component={BodyFatScreen} />
+      <Stack.Screen name="ProteinCalc" component={ProteinScreen} />
+      <Stack.Screen name="CalorieCalc" component={CalorieScreen} />
     </Stack.Navigator>
   );
 }

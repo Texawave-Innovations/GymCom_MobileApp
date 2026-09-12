@@ -6,7 +6,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import IronHeader from '../components/IronHeader';
 import ScrollFloat from '../components/ScrollFloat';
-import { darkColors, typography, spacing, radius } from '../theme';
+import { typography, spacing, radius } from '../theme';
 import { useThemeMode } from '../hooks/useThemeMode';
 import { PPL_SPLIT } from '../data/pplSplit';
 import { getTodaysLesson } from '../data/ironLessons';
@@ -17,41 +17,6 @@ function getTodaysSplitDay() {
   const dayIndex = jsDay === 0 ? 6 : jsDay - 1;
   return PPL_SPLIT[dayIndex];
 }
-
-const LEGENDS = [
-  {
-    id: 'oak',
-    label: 'High Volume',
-    name: 'Arnold split',
-    image: require('../assets/arnold.webp'),
-    route: 'ArnoldSplit',
-    params: { id: 'oak-volume' },
-  },
-  {
-    id: 'shadow',
-    label: 'High Intensity',
-    name: 'Heavy Duty',
-    image: require('../assets/mike mentzer.webp'),
-    route: 'MentzerSplit',
-    params: { id: 'blood-guts-back' },
-  },
-  {
-    id: 'Tom platz',
-    label: 'High Volume',
-    name: 'Platz leg training',
-    image: require('../assets/tom-platz.gif'),
-    route: 'PlatzSplit',
-    params: { id: 'Tom platz' },
-  },
-  {
-    id: 'kevin',
-    label: 'High intense',
-    name: 'levrone method',
-    image: require('../assets/kevin-levroni.gif'),
-    route: 'LevroneSplit',
-    params: { id: 'kevin-levrone' },
-  },
-];
 
 export default function HomeScreen() {
   const navigation = useNavigation<any>();
@@ -105,38 +70,7 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        <View style={[styles.section, { marginTop: spacing.stackSm }]}>
-          <View style={styles.sectionHeaderRow}>
-            <Text style={styles.sectionTitle}>TRAIN LIKE A LEGEND</Text>
-          </View>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: spacing.gutter, paddingHorizontal: spacing.marginMobile }}>
-            {LEGENDS.map((legend) => (
-              <TouchableOpacity
-                key={legend.id}
-                style={styles.legendCard}
-                activeOpacity={0.85}
-                onPress={() => navigation.navigate(legend.route, legend.params)}
-              >
-                <Image source={legend.image} style={StyleSheet.absoluteFill} contentFit="cover" />
-                <LinearGradient colors={['transparent', 'rgba(14,14,14,0.85)']} style={StyleSheet.absoluteFill} />
-                <View style={styles.legendCardContent}>
-                  <Text style={styles.legendLabel}>{legend.label}</Text>
-                  <Text style={styles.legendName}>{legend.name}</Text>
-                </View>
-              </TouchableOpacity>
-            ))}
-            <TouchableOpacity
-              style={styles.viewAllCard}
-              activeOpacity={0.85}
-              onPress={() => navigation.navigate('Legends')}
-            >
-              <MaterialIcons name="arrow-forward" size={22} color={colors.primary} />
-              <Text style={styles.viewAll}>View All</Text>
-            </TouchableOpacity>
-          </ScrollView>
-        </View>
-
-        <View style={[styles.section, { paddingHorizontal: spacing.marginMobile }]}>
+        <View style={[styles.section, { paddingHorizontal: spacing.marginMobile, marginTop: spacing.stackSm }]}>
           <Text style={styles.sectionTitle}>TODAY'S IRON LESSON</Text>
           <View style={styles.lessonCard}>
             <View style={styles.badge}><Text style={styles.badgeText}>{todaysLesson.tag}</Text></View>
@@ -204,29 +138,7 @@ const makeStyles = (colors: ReturnType<typeof useThemeMode>['colors']) => StyleS
   startBtnText: { ...typography.headlineMd, fontSize: 18, color: colors.onPrimary, textTransform: 'uppercase' },
   startBtnDisabled: { opacity: 0.6 },
   section: { marginTop: spacing.stackLg, gap: spacing.stackSm },
-  sectionHeaderRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
-    paddingHorizontal: spacing.marginMobile,
-  },
   sectionTitle: { ...typography.headlineMd, color: colors.onSurface, textTransform: 'uppercase' },
-  viewAll: { ...typography.labelCaps, color: colors.primary },
-  legendCard: { width: 220, height: 280, borderWidth: 1, borderColor: colors.outlineVariant, borderRadius: radius.md, justifyContent: 'flex-end', overflow: 'hidden' },
-  viewAllCard: {
-    width: 120,
-    height: 280,
-    borderWidth: 1,
-    borderColor: colors.outlineVariant,
-    borderRadius: radius.md,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    backgroundColor: colors.surfaceContainer,
-  },
-  legendCardContent: { padding: spacing.gutter },
-  legendLabel: { ...typography.labelCaps, color: darkColors.primary, marginBottom: 4 },
-  legendName: { ...typography.headlineMd, color: darkColors.onSurface, textTransform: 'uppercase' },
   lessonCard: { backgroundColor: colors.surfaceContainer, borderWidth: 1, borderColor: colors.outlineVariant, borderRadius: radius.md, padding: spacing.stackMd },
   lessonBody: { ...typography.bodyMd, color: colors.onSurfaceVariant, marginTop: 8 },
   statsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 2, backgroundColor: colors.outlineVariant, borderRadius: radius.md, overflow: 'hidden' },

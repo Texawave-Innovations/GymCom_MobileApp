@@ -26,7 +26,7 @@ const WORKOUTS = [
     exercises: 8,
     sets: 24,
     duration: '40m',
-    image: 'https://images.pexels.com/photos/866027/pexels-photo-866027.jpeg',
+    image: require('../assets/hero-page.jpg'),
   },
   {
     id: 'push-pull-legs',

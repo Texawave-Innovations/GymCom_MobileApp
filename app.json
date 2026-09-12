@@ -1,22 +1,25 @@
 {
   "expo": {
-    "name": "Gymcom",
-    "slug": "Gymcom",
-    "version": "1.0.0",
+    "name": "GymCom",
+    "slug": "GymCom",
+    "version": "26.09.0-0.2.0",
     "orientation": "portrait",
     "icon": "./assets/gymcom-icon.png",
     "userInterfaceStyle": "light",
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.texawave.gymcomapp"
     },
     "android": {
+      "package": "com.texawave.gymcomapp",
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/gymcom-icon.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "versionCode": 2
     },
     "web": {
       "favicon": "./assets/gymcom-icon.png"

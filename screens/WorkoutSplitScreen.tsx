@@ -379,7 +379,7 @@ const makeStyles = (colors: ReturnType<typeof useThemeMode>['colors']) => StyleS
 
   structureRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, paddingHorizontal: spacing.marginMobile, paddingTop: spacing.stackMd },
   structureChip: { borderWidth: 1, borderColor: colors.secondaryContainer, borderRadius: radius.sm, paddingHorizontal: 10, paddingVertical: 6, backgroundColor: colors.surfaceContainerLow },
-  structureChipRest: { borderColor: colors.primary, backgroundColor: 'rgba(233,193,118,0.08)' },
+  structureChipRest: { borderColor: colors.primary, backgroundColor: 'rgba(244,167,44,0.08)' },
   structureChipActive: { backgroundColor: colors.primary, borderColor: colors.primary },
   structureChipText: { ...typography.labelCaps, fontSize: 10, color: colors.onSurfaceVariant },
   structureChipTextRest: { color: colors.primary },
@@ -390,7 +390,7 @@ const makeStyles = (colors: ReturnType<typeof useThemeMode>['colors']) => StyleS
   dayHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 16 },
   dayHeaderLeft: { flexDirection: 'row', alignItems: 'center', gap: 12, flex: 1 },
   dayNumBadge: { width: 40, height: 40, borderRadius: radius.sm, backgroundColor: colors.surfaceContainerHigh, alignItems: 'center', justifyContent: 'center' },
-  dayNumBadgeRest: { backgroundColor: 'rgba(233,193,118,0.12)' },
+  dayNumBadgeRest: { backgroundColor: 'rgba(244,167,44,0.12)' },
   dayNumText: { ...typography.statsNum, fontSize: 13, color: colors.primary, textAlign: 'center' },
   dayNumTextRest: { color: colors.primary },
   dayTitle: { ...typography.headlineMd, fontSize: 17, color: colors.onSurface, textTransform: 'uppercase' },

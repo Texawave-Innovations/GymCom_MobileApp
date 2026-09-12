@@ -11,9 +11,9 @@ export const darkColors = {
   onSurfaceVariant: '#d1c5b4',
   outline: '#9a8f80',
   outlineVariant: '#4e4639',
-  primary: '#e9c176',
-  onPrimary: '#412d00',
-  primaryFixedDim: '#c5a059',
+  primary: '#f4a72c',
+  onPrimary: '#221800',
+  primaryFixedDim: '#d98e1c',
   secondary: '#c6c6c7',
   secondaryContainer: '#454748',
   onSecondaryContainer: '#b5b5b6',
@@ -21,7 +21,7 @@ export const darkColors = {
   background: '#131313',
   matteBlack: '#131313',
   charcoal: '#201f1f',
-  agedGold: '#e9c176',
+  agedGold: '#f4a72c',
   steelGray: '#4e4639',
 };
 
@@ -38,9 +38,9 @@ export const lightColors = {
   onSurfaceVariant: '#4e4639',
   outline: '#d1c5b4',
   outlineVariant: '#d1c5b4',
-  primary: '#c5a059',
-  onPrimary: '#ffffff',
-  primaryFixedDim: '#e9c176',
+  primary: '#e0921a',
+  onPrimary: '#1c1400',
+  primaryFixedDim: '#f4a72c',
   secondary: '#c6c6c7',
   secondaryContainer: '#e3e2e3',
   onSecondaryContainer: '#2f3132',
@@ -48,7 +48,7 @@ export const lightColors = {
   background: '#FBF9F4',
   matteBlack: '#131313',
   charcoal: '#131313',
-  agedGold: '#c5a059',
+  agedGold: '#e0921a',
   steelGray: '#4e4639',
 };
 

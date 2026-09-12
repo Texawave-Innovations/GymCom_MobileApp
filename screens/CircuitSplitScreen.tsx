@@ -31,7 +31,7 @@ if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental
   UIManager.setLayoutAnimationEnabledExperimental(true);
 }
 
-const HERO_IMAGE = 'https://images.pexels.com/photos/866027/pexels-photo-866027.jpeg';
+const HERO_IMAGE = require('../assets/hero-page.jpg');
 
 function ExerciseRow({
   ex,
@@ -238,7 +238,7 @@ export default function CircuitSplitScreen() {
           onScroll={handleScroll}
         >
           <ImageBackground
-            source={{ uri: HERO_IMAGE }}
+            source={HERO_IMAGE}
             style={styles.hero}
             imageStyle={{ resizeMode: 'cover' }}
             resizeMode="cover"
@@ -348,7 +348,7 @@ const makeStyles = (colors: ReturnType<typeof useThemeMode>['colors']) => StyleS
 
   structureRow: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, paddingHorizontal: spacing.marginMobile, paddingTop: spacing.stackMd },
   structureChip: { borderWidth: 1, borderColor: colors.secondaryContainer, borderRadius: radius.sm, paddingHorizontal: 10, paddingVertical: 6, backgroundColor: colors.surfaceContainerLow },
-  structureChipRest: { borderColor: colors.primary, backgroundColor: 'rgba(233,193,118,0.08)' },
+  structureChipRest: { borderColor: colors.primary, backgroundColor: 'rgba(244,167,44,0.08)' },
   structureChipActive: { backgroundColor: colors.primary, borderColor: colors.primary },
   structureChipText: { ...typography.labelCaps, fontSize: 10, color: colors.onSurfaceVariant },
   structureChipTextRest: { color: colors.primary },
@@ -361,7 +361,7 @@ const makeStyles = (colors: ReturnType<typeof useThemeMode>['colors']) => StyleS
   dayHeaderText: { flex: 1 },
   dayHeaderChevron: { flexShrink: 0 },
   dayNumBadge: { width: 40, height: 40, borderRadius: radius.sm, backgroundColor: colors.surfaceContainerHigh, alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
-  dayNumBadgeRest: { backgroundColor: 'rgba(233,193,118,0.12)' },
+  dayNumBadgeRest: { backgroundColor: 'rgba(244,167,44,0.12)' },
   dayNumText: { ...typography.statsNum, fontSize: 18, color: colors.primary },
   dayNumTextRest: { color: colors.primary },
   dayTitle: { ...typography.headlineMd, fontSize: 18, color: colors.onSurface, textTransform: 'uppercase', flexWrap: 'wrap' },
@@ -369,7 +369,7 @@ const makeStyles = (colors: ReturnType<typeof useThemeMode>['colors']) => StyleS
   dayBody: { paddingHorizontal: 16, paddingBottom: 16, borderTopWidth: 1, borderTopColor: colors.secondaryContainer },
   restNoteRow: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingTop: 12, paddingBottom: 4 },
   restNoteText: { ...typography.labelCaps, fontSize: 10, color: colors.onSurfaceVariant },
-  supersetBox: { flexDirection: 'row', alignItems: 'flex-start', gap: 8, backgroundColor: 'rgba(233,193,118,0.08)', borderRadius: radius.sm, padding: 10, marginVertical: 8 },
+  supersetBox: { flexDirection: 'row', alignItems: 'flex-start', gap: 8, backgroundColor: 'rgba(244,167,44,0.08)', borderRadius: radius.sm, padding: 10, marginVertical: 8 },
   supersetText: { ...typography.bodyMd, fontSize: 12, color: colors.onSurfaceVariant, flex: 1, lineHeight: 18 },
   restDayBox: { alignItems: 'center', gap: 10, paddingVertical: 24 },
   restDayText: { ...typography.bodyMd, color: colors.onSurfaceVariant, textAlign: 'center', paddingHorizontal: 12, lineHeight: 20 },
