@@ -2,7 +2,7 @@
   "expo": {
     "name": "GymCom",
     "slug": "GymCom",
-    "version": "26.09.0-0.2.0",
+    "version": "26.09.0-0.3.0",
     "orientation": "portrait",
     "icon": "./assets/gymcom-icon.png",
     "userInterfaceStyle": "light",
@@ -19,7 +19,7 @@
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "versionCode": 2
+      "versionCode": 3
     },
     "web": {
       "favicon": "./assets/gymcom-icon.png"

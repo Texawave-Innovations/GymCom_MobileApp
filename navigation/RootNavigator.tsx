@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialIcons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { typography, radius } from '../theme';
 import { useThemeMode } from '../hooks/useThemeMode';
 
@@ -62,6 +63,7 @@ function TabSlot({ route, isActive, onPress, label, scale, activeColor, inactive
 
 function FloatingTabBar({ state, descriptors, navigation }: any) {
   const { mode, colors } = useThemeMode();
+  const insets = useSafeAreaInsets();
   const isDark = mode === 'dark';
   const glass = {
     tint: isDark ? 'rgba(16,16,16,0.28)' : 'rgba(255,255,255,0.34)',
@@ -130,7 +132,7 @@ function FloatingTabBar({ state, descriptors, navigation }: any) {
   ).current;
 
   return (
-    <View style={navStyles.barWrapper} pointerEvents="box-none">
+    <View style={[navStyles.barWrapper, { bottom: 24 + insets.bottom }]} pointerEvents="box-none">
       <View style={navStyles.barShadow}>
         <View
           style={[navStyles.bar, { borderColor: glass.rim }]}
@@ -205,7 +207,6 @@ function FloatingTabBar({ state, descriptors, navigation }: any) {
 const navStyles = {
   barWrapper: {
     position: 'absolute' as const,
-    bottom: 24,
     left: 0,
     right: 0,
     alignItems: 'center' as const,
