@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import IronHeader from '../../components/IronHeader';
@@ -37,7 +37,7 @@ export default function BmiScreen() {
   const [unitSystem, setUnitSystem] = useState<UnitSystem>('metric');
   const [weight, setWeight] = useState('');
   const [height, setHeight] = useState('');
-  const [bmi, setBmi] = useState<number | null>(null);
+  const [hasCalculated, setHasCalculated] = useState(false);
 
   const weightUnitLabel = unitSystem === 'metric' ? 'KG' : 'LBS';
 
@@ -47,15 +47,20 @@ export default function BmiScreen() {
     setUnitSystem(next);
   };
 
-  const calculate = () => {
-    if (!isValid(weight, height)) return;
+  const bmi = useMemo(() => {
+    if (!hasCalculated || !isValid(weight, height)) return null;
     const w = toKg(toNumber(weight), unitSystem);
     const h = toNumber(height) / 100;
-    setBmi(parseFloat((w / (h * h)).toFixed(2)));
+    return parseFloat((w / (h * h)).toFixed(2));
+  }, [hasCalculated, weight, height, unitSystem]);
+
+  const calculate = () => {
+    if (!isValid(weight, height)) return;
+    setHasCalculated(true);
   };
 
   return (
-    <KeyboardAvoidingView style={styles.screen} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <KeyboardAvoidingView style={styles.screen} behavior="padding">
       <IronHeader title="BMI" showBack onBackPress={() => navigation.goBack()} />
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
         <View style={styles.pageHeader}>

@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import IronHeader from '../../components/IronHeader';
@@ -66,9 +66,7 @@ export default function BodyFatScreen() {
   const [weight, setWeight] = useState('');
   const [height, setHeight] = useState('');
   const [age, setAge] = useState('');
-  const [fat, setFat] = useState<number | null>(null);
-  const [ratedAge, setRatedAge] = useState<number>(0);
-  const [ratedGender, setRatedGender] = useState<Gender>('MALE');
+  const [hasCalculated, setHasCalculated] = useState(false);
 
   const weightUnitLabel = unitSystem === 'metric' ? 'KG' : 'LBS';
 
@@ -78,23 +76,26 @@ export default function BodyFatScreen() {
     setUnitSystem(next);
   };
 
-  const calculate = () => {
-    if (!isValid(weight, height, age)) return;
+  const fat = useMemo(() => {
+    if (!hasCalculated || !isValid(weight, height, age)) return null;
     const w = toKg(toNumber(weight), unitSystem);
     const h = toNumber(height) / 100;
     const bmi = w / (h * h);
     const a = toNumber(age);
     const offset = gender === 'MALE' ? 16.2 : 5.4;
     const result = 1.2 * bmi + 0.23 * a - offset;
-    setFat(parseFloat(result.toFixed(2)));
-    setRatedAge(a);
-    setRatedGender(gender);
+    return parseFloat(result.toFixed(2));
+  }, [hasCalculated, weight, height, age, unitSystem, gender]);
+
+  const calculate = () => {
+    if (!isValid(weight, height, age)) return;
+    setHasCalculated(true);
   };
 
-  const status = fat !== null ? getFatStatus(fat, ratedAge, ratedGender, colors) : null;
+  const status = fat !== null ? getFatStatus(fat, toNumber(age), gender, colors) : null;
 
   return (
-    <KeyboardAvoidingView style={styles.screen} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <KeyboardAvoidingView style={styles.screen} behavior="padding">
       <IronHeader title="BODY FAT" showBack onBackPress={() => navigation.goBack()} />
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
         <View style={styles.pageHeader}>

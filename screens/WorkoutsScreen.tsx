@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { View, Text, StyleSheet, ScrollView, ImageBackground, TouchableOpacity, TextInput, Animated, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ImageBackground, TouchableOpacity, TextInput, Animated, Alert, KeyboardAvoidingView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import IronHeader from '../components/IronHeader';
 import ScrollFloat from '../components/ScrollFloat';
 import { darkColors, typography, spacing, radius } from '../theme';
 import { useThemeMode } from '../hooks/useThemeMode';
+import { useTabBarClearance } from '../hooks/useTabBarClearance';
 
 type Level = 'beginner' | 'intermediate' | 'custom' | 'legend';
 
@@ -126,6 +127,7 @@ type CustomSplit = { id: string; name: string; baseIds: string[] };
 export default function WorkoutsScreen() {
   const { colors } = useThemeMode();
   const styles = useMemo(() => makeStyles(colors), [colors]);
+  const tabBarClearance = useTabBarClearance();
   const navigation = useNavigation<any>();
   const [level, setLevel] = useState<Level>('beginner');
   const [customSplits, setCustomSplits] = useState<CustomSplit[]>([]);
@@ -172,9 +174,14 @@ export default function WorkoutsScreen() {
   };
 
   return (
-    <View style={styles.screen}>
+    <KeyboardAvoidingView style={styles.screen} behavior="padding">
       <IronHeader title="GYMCOM" />
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false} decelerationRate="normal">
+      <ScrollView
+        contentContainerStyle={[styles.content, { paddingBottom: tabBarClearance }]}
+        showsVerticalScrollIndicator={false}
+        decelerationRate="normal"
+        keyboardShouldPersistTaps="handled"
+      >
         <View style={styles.pageHeader}>
           <ScrollFloat textStyle={styles.pageTitle} duration={1400} distance={20} stagger={0.045}>
             Old School Workouts
@@ -385,13 +392,13 @@ export default function WorkoutsScreen() {
           </View>
         )}
       </ScrollView>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const makeStyles = (colors: ReturnType<typeof useThemeMode>['colors']) => StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.background },
-  content: { paddingBottom: spacing.stackLg },
+  content: {},
   pageHeader: { padding: spacing.marginMobile, gap: spacing.stackSm, backgroundColor: colors.surfaceDim, borderBottomWidth: 1, borderBottomColor: colors.surfaceContainerHigh },
   pageTitle: { ...typography.displayXl, fontSize: 40, lineHeight: 48, paddingTop: 6, color: colors.onSurface, textTransform: 'uppercase' },
   pageSub: { ...typography.bodyLg, fontSize: 16, color: colors.onSurfaceVariant },

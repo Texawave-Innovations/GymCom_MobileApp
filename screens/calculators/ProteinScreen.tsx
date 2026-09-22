@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import IronHeader from '../../components/IronHeader';
@@ -41,7 +41,7 @@ export default function ProteinScreen() {
   const [gender, setGender] = useState<Gender>('MALE');
   const [weight, setWeight] = useState('');
   const [activityIndex, setActivityIndex] = useState(0);
-  const [grams, setGrams] = useState<number | null>(null);
+  const [hasCalculated, setHasCalculated] = useState(false);
 
   const weightUnitLabel = unitSystem === 'metric' ? 'KG' : 'LBS';
 
@@ -51,15 +51,20 @@ export default function ProteinScreen() {
     setUnitSystem(next);
   };
 
-  const calculate = () => {
-    if (!isValid(weight)) return;
+  const grams = useMemo(() => {
+    if (!hasCalculated || !isValid(weight)) return null;
     const w = toKg(toNumber(weight), unitSystem);
     const factor = (gender === 'MALE' ? MALE_FACTORS : FEMALE_FACTORS)[activityIndex];
-    setGrams(parseFloat((w * factor).toFixed(1)));
+    return parseFloat((w * factor).toFixed(1));
+  }, [hasCalculated, weight, unitSystem, gender, activityIndex]);
+
+  const calculate = () => {
+    if (!isValid(weight)) return;
+    setHasCalculated(true);
   };
 
   return (
-    <KeyboardAvoidingView style={styles.screen} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <KeyboardAvoidingView style={styles.screen} behavior="padding">
       <IronHeader title="PROTEIN" showBack onBackPress={() => navigation.goBack()} />
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
         <View style={styles.pageHeader}>

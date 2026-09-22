@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { typography, radius } from '../theme';
+import { typography, radius, TAB_BAR_HEIGHT, TAB_BAR_BOTTOM_OFFSET } from '../theme';
 import { useThemeMode } from '../hooks/useThemeMode';
 
 import HomeScreen from '../screens/HomeScreen';
@@ -131,7 +131,7 @@ function FloatingTabBar({ state, descriptors, navigation }: any) {
   ).current;
 
   return (
-    <View style={[navStyles.barWrapper, { bottom: 24 + insets.bottom }]} pointerEvents="box-none">
+    <View style={[navStyles.barWrapper, { bottom: TAB_BAR_BOTTOM_OFFSET + insets.bottom }]} pointerEvents="box-none">
       <View style={navStyles.barShadow}>
         <View
           style={[navStyles.bar, { borderColor: glass.rim }]}
@@ -212,7 +212,7 @@ const navStyles = {
     flexDirection: 'row' as const,
     alignItems: 'center' as const,
     width: '100%' as const,
-    height: 80,
+    height: TAB_BAR_HEIGHT,
     paddingVertical: 6,
     borderRadius: radius.pill,
     borderWidth: 1.5,

@@ -8,6 +8,10 @@ export type UnitSystem = 'metric' | 'imperial';
 export type Gender = 'MALE' | 'FEMALE';
 export type Styles = ReturnType<typeof makeCalcStyles>;
 
+export function onlyDigits(value: string) {
+  return value.replace(/[^0-9]/g, '');
+}
+
 export function toNumber(value: string) {
   const n = parseFloat(value);
   return Number.isFinite(n) ? n : NaN;
@@ -39,7 +43,7 @@ export function convertWeightField(value: string, from: UnitSystem, to: UnitSyst
   if (from === to) return value;
   const kg = toKg(n, from);
   const converted = to === 'imperial' ? kgToLbs(kg) : kg;
-  return String(parseFloat(converted.toFixed(1)));
+  return String(Math.round(converted));
 }
 
 export function cmToFeetInches(cm: number) {
@@ -74,10 +78,10 @@ export function Field({
       <View style={styles.fieldInputRow}>
         <TextInput
           style={styles.fieldInput}
-          keyboardType="numeric"
+          keyboardType="number-pad"
           keyboardAppearance="dark"
           value={value}
-          onChangeText={onChangeText}
+          onChangeText={(v) => onChangeText(onlyDigits(v))}
           placeholder={placeholder ?? '0'}
           placeholderTextColor={colors.surfaceContainerHighest}
         />
@@ -231,7 +235,7 @@ export function UnitGenderRow({
 export function makeCalcStyles(colors: ThemeColors) {
   return StyleSheet.create({
     screen: { flex: 1, backgroundColor: colors.background },
-    content: { padding: spacing.marginMobile, paddingBottom: 120, gap: spacing.stackMd },
+    content: { padding: spacing.marginMobile, paddingBottom: spacing.stackLg, gap: spacing.stackMd },
     pageHeader: { gap: 4 },
     pageTitle: { ...typography.displayXl, fontSize: 32, lineHeight: 38, color: colors.primary, textTransform: 'uppercase' },
     pageSub: { ...typography.labelCaps, fontSize: 11, color: colors.onSurfaceVariant },

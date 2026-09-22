@@ -6,16 +6,21 @@ import IronHeader from '../components/IronHeader';
 import ScrollFloat from '../components/ScrollFloat';
 import { darkColors, typography, spacing, radius } from '../theme';
 import { useThemeMode } from '../hooks/useThemeMode';
+import { useTabBarClearance } from '../hooks/useTabBarClearance';
 import { GYM_TIPS } from '../data/gymTips';
 
 export default function TipsScreen() {
   const { colors } = useThemeMode();
   const styles = useMemo(() => makeStyles(colors), [colors]);
+  const tabBarClearance = useTabBarClearance();
 
   return (
     <View style={styles.screen}>
       <IronHeader title="GYMCOM" />
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={[styles.content, { paddingBottom: tabBarClearance }]}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.pageHeader}>
           <ScrollFloat textStyle={styles.pageTitle} duration={1400} distance={22} stagger={0.045}>
             IRON TIPS.
@@ -52,7 +57,7 @@ export default function TipsScreen() {
 const makeStyles = (colors: ReturnType<typeof useThemeMode>['colors']) =>
   StyleSheet.create({
     screen: { flex: 1, backgroundColor: colors.background },
-    content: { padding: spacing.marginMobile, paddingBottom: 120, gap: spacing.stackMd },
+    content: { padding: spacing.marginMobile, paddingBottom: spacing.stackLg, gap: spacing.stackMd },
     pageHeader: {
       gap: spacing.stackSm,
       borderBottomWidth: 1,

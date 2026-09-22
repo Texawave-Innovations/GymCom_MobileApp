@@ -74,6 +74,12 @@ export const spacing = {
   stackLg: 56,
 };
 
+// Geometry of the floating tab bar in navigation/RootNavigator.tsx. Screens use the
+// useTabBarClearance hook (hooks/useTabBarClearance.ts) to turn this into an actual
+// per-device bottom padding, since the safe-area inset varies by device.
+export const TAB_BAR_HEIGHT = 80;
+export const TAB_BAR_BOTTOM_OFFSET = 24;
+
 export const radius = {
   sm: 6,
   md: 10,
