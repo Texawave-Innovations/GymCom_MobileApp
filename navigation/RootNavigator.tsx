@@ -3,7 +3,6 @@ import { Animated, PanResponder, StyleSheet, Text, TouchableOpacity, View } from
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialIcons } from '@expo/vector-icons';
-import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { typography, radius } from '../theme';
@@ -139,12 +138,6 @@ function FloatingTabBar({ state, descriptors, navigation }: any) {
           onLayout={(e) => setBarWidth(e.nativeEvent.layout.width)}
           {...panResponder.panHandlers}
         >
-          <BlurView
-            tint={isDark ? 'dark' : 'light'}
-            intensity={60}
-            experimentalBlurMethod="dimezisBlurView"
-            style={StyleSheet.absoluteFill}
-          />
           <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: glass.tint }]} />
           <LinearGradient
             pointerEvents="none"
@@ -166,12 +159,6 @@ function FloatingTabBar({ state, descriptors, navigation }: any) {
                 },
               ]}
             >
-              <BlurView
-                tint={isDark ? 'light' : 'light'}
-                intensity={isDark ? 24 : 40}
-                experimentalBlurMethod="dimezisBlurView"
-                style={[StyleSheet.absoluteFill, { borderRadius: navStyles.pill.borderRadius }]}
-              />
               <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: glass.pillFill, borderRadius: navStyles.pill.borderRadius }]} />
               <LinearGradient
                 pointerEvents="none"
@@ -289,8 +276,11 @@ function Tabs() {
 }
 
 export default function RootNavigator() {
+  const { colors } = useThemeMode();
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator
+      screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.surface } }}
+    >
       <Stack.Screen name="Tabs" component={Tabs} />
       <Stack.Screen name="WorkoutSplit" component={WorkoutSplitScreen} />
       <Stack.Screen name="ArnoldSplit" component={ArnoldSplitScreen} />

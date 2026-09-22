@@ -9,8 +9,6 @@ import {
   Animated,
   Easing,
   LayoutAnimation,
-  Platform,
-  UIManager,
   Dimensions,
   NativeSyntheticEvent,
   NativeScrollEvent,
@@ -27,10 +25,6 @@ import { useThemeMode } from '../hooks/useThemeMode';
 import { PPL_SPLIT, PPL_NOTES, type PPLExercise, type PPLDay } from '../data/pplSplit';
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
-
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-}
 
 const HERO_IMAGE = 'https://images.pexels.com/photos/14599070/pexels-photo-14599070.jpeg';
 

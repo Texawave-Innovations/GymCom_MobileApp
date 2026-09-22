@@ -52,7 +52,11 @@ export default function IronHeader({ title = 'GYMCOM', onMenuPress, showBack, on
                 activeOpacity={0.7}
                 onPress={() => {
                   setMenuOpen(false);
-                  navigation.navigate(item.key);
+                  // Navigate after the Modal has actually torn down its native
+                  // window; firing navigation in the same tick as the close
+                  // leaves the destination screen mounted-but-unpainted on
+                  // Android until a later re-render forces a repaint.
+                  setTimeout(() => navigation.navigate(item.key), 100);
                 }}
               >
                 <MaterialIcons name={item.icon} size={18} color={colors.primary} />
