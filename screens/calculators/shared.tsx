@@ -276,6 +276,8 @@ export function makeCalcStyles(colors: ThemeColors) {
       ...typography.statsNum,
       fontSize: 18,
       lineHeight: 22,
+      includeFontPadding: false,
+      textAlignVertical: 'center',
       color: colors.onSurface,
       flex: 1,
       paddingVertical: 10,

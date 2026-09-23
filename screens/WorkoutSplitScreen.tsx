@@ -390,8 +390,8 @@ const makeStyles = (colors: ReturnType<typeof useThemeMode>['colors']) => StyleS
   dayTitle: { ...typography.headlineMd, fontSize: 17, color: colors.onSurface, textTransform: 'uppercase' },
   dayFocus: { ...typography.bodyMd, fontSize: 12, color: colors.onSurfaceVariant, marginTop: 2 },
   dayBody: { paddingHorizontal: 16, paddingBottom: 16, borderTopWidth: 1, borderTopColor: colors.secondaryContainer },
-  restNoteRow: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingTop: 12, paddingBottom: 6 },
-  restNoteText: { ...typography.labelCaps, fontSize: 10, color: colors.onSurfaceVariant },
+  restNoteRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 6, paddingTop: 12, paddingBottom: 6 },
+  restNoteText: { ...typography.labelCaps, fontSize: 10, color: colors.onSurfaceVariant, flex: 1, flexShrink: 1 },
   restDayBox: { alignItems: 'center', gap: 10, paddingVertical: 24 },
   restDayText: { ...typography.bodyMd, color: colors.onSurfaceVariant, textAlign: 'center', paddingHorizontal: 12, lineHeight: 20 },
 

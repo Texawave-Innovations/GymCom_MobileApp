@@ -475,6 +475,7 @@ const makeStyles = (colors: ReturnType<typeof useThemeMode>['colors']) => StyleS
     borderColor: colors.primary,
     borderRadius: radius.sm,
     paddingVertical: 14,
+    paddingHorizontal: spacing.gutter,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',

@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { BlurView } from 'expo-blur';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { typography, radius, TAB_BAR_HEIGHT, TAB_BAR_BOTTOM_OFFSET } from '../theme';
 import { useThemeMode } from '../hooks/useThemeMode';
@@ -65,7 +66,7 @@ function FloatingTabBar({ state, descriptors, navigation }: any) {
   const insets = useSafeAreaInsets();
   const isDark = mode === 'dark';
   const glass = {
-    tint: isDark ? 'rgba(16,16,16,0.28)' : 'rgba(255,255,255,0.34)',
+    tint: isDark ? 'rgba(16,16,16,0.18)' : 'rgba(255,255,255,0.20)',
     rim: isDark ? 'rgba(255,255,255,0.22)' : 'rgba(255,255,255,0.95)',
     sheenTop: isDark ? 'rgba(255,255,255,0.28)' : 'rgba(255,255,255,0.95)',
     pillFill: isDark ? 'rgba(255,255,255,0.16)' : 'rgba(255,255,255,0.62)',
@@ -138,6 +139,13 @@ function FloatingTabBar({ state, descriptors, navigation }: any) {
           onLayout={(e) => setBarWidth(e.nativeEvent.layout.width)}
           {...panResponder.panHandlers}
         >
+          <BlurView
+            pointerEvents="none"
+            intensity={isDark ? 55 : 65}
+            tint={isDark ? 'dark' : 'light'}
+            experimentalBlurMethod="dimezisBlurView"
+            style={StyleSheet.absoluteFill}
+          />
           <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: glass.tint }]} />
           <LinearGradient
             pointerEvents="none"
