@@ -9,6 +9,8 @@ import { useThemeMode } from '../hooks/useThemeMode';
 import { useTabBarClearance } from '../hooks/useTabBarClearance';
 import { GYM_TIPS } from '../data/gymTips';
 
+const ZOOMED_TIP_IDS = new Set(['progressive-overload', 'warm-up', 'mind-muscle', 'rest-periods', 'consistency']);
+
 export default function TipsScreen() {
   const { colors } = useThemeMode();
   const styles = useMemo(() => makeStyles(colors), [colors]);
@@ -31,7 +33,12 @@ export default function TipsScreen() {
         {GYM_TIPS.map((tip, i) => (
           <View key={tip.id} style={styles.card}>
             <View style={styles.imageWrap}>
-              <Image source={tip.image} style={StyleSheet.absoluteFill} contentFit="cover" contentPosition="top center" />
+              <Image
+                source={tip.image}
+                style={[StyleSheet.absoluteFill, ZOOMED_TIP_IDS.has(tip.id) && styles.imageZoom]}
+                contentFit="cover"
+                contentPosition="top center"
+              />
               <LinearGradient
                 colors={['transparent', 'rgba(19,19,19,0.35)', 'rgba(19,19,19,0.9)']}
                 style={StyleSheet.absoluteFill}
@@ -81,7 +88,16 @@ const makeStyles = (colors: ReturnType<typeof useThemeMode>['colors']) =>
       borderRadius: radius.md,
       overflow: 'hidden',
     },
-    imageWrap: { width: '100%', aspectRatio: 16 / 10, justifyContent: 'flex-end' },
+    imageWrap: {
+      width: '100%',
+      aspectRatio: 16 / 10,
+      justifyContent: 'flex-end',
+      overflow: 'hidden',
+      borderTopLeftRadius: radius.md,
+      borderTopRightRadius: radius.md,
+      backgroundColor: colors.surfaceContainerLow,
+    },
+    imageZoom: { transform: [{ scale: 1.22 }] },
     imageOverlay: {
       flexDirection: 'row',
       alignItems: 'flex-end',
