@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import IronHeader from '../../components/IronHeader';
@@ -42,8 +42,7 @@ export default function CalorieScreen() {
   const [height, setHeight] = useState('');
   const [age, setAge] = useState('');
   const [activityIndex, setActivityIndex] = useState(0);
-  const [bmr, setBmr] = useState<number | null>(null);
-  const [calories, setCalories] = useState<number | null>(null);
+  const [hasCalculated, setHasCalculated] = useState(false);
 
   const weightUnitLabel = unitSystem === 'metric' ? 'KG' : 'LBS';
 
@@ -53,8 +52,8 @@ export default function CalorieScreen() {
     setUnitSystem(next);
   };
 
-  const calculate = () => {
-    if (!isValid(weight, height, age)) return;
+  const bmr = useMemo(() => {
+    if (!hasCalculated || !isValid(weight, height, age)) return null;
     const w = toKg(toNumber(weight), unitSystem);
     const h = toNumber(height);
     const a = toNumber(age);
@@ -62,13 +61,21 @@ export default function CalorieScreen() {
       gender === 'MALE'
         ? 88.361 + 13.397 * w + 4.799 * h - 5.677 * a
         : 447.593 + 9.247 * w + 3.098 * h - 4.33 * a;
-    const roundedBmr = Math.round(result);
-    setBmr(roundedBmr);
-    setCalories(Math.round(roundedBmr * ACTIVITY_LEVELS[activityIndex].multiplier));
+    return Math.round(result);
+  }, [hasCalculated, weight, height, age, unitSystem, gender]);
+
+  const calories = useMemo(() => {
+    if (bmr === null) return null;
+    return Math.round(bmr * ACTIVITY_LEVELS[activityIndex].multiplier);
+  }, [bmr, activityIndex]);
+
+  const calculate = () => {
+    if (!isValid(weight, height, age)) return;
+    setHasCalculated(true);
   };
 
   return (
-    <KeyboardAvoidingView style={styles.screen} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+    <KeyboardAvoidingView style={styles.screen} behavior="padding">
       <IronHeader title="CALORIES" showBack onBackPress={() => navigation.goBack()} />
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
         <View style={styles.pageHeader}>

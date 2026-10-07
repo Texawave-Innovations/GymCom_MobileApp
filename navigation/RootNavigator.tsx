@@ -3,10 +3,10 @@ import { Animated, PanResponder, StyleSheet, Text, TouchableOpacity, View } from
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialIcons } from '@expo/vector-icons';
-import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
+import { BlurView } from 'expo-blur';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { typography, radius } from '../theme';
+import { typography, radius, TAB_BAR_HEIGHT, TAB_BAR_BOTTOM_OFFSET } from '../theme';
 import { useThemeMode } from '../hooks/useThemeMode';
 
 import HomeScreen from '../screens/HomeScreen';
@@ -66,7 +66,7 @@ function FloatingTabBar({ state, descriptors, navigation }: any) {
   const insets = useSafeAreaInsets();
   const isDark = mode === 'dark';
   const glass = {
-    tint: isDark ? 'rgba(16,16,16,0.28)' : 'rgba(255,255,255,0.34)',
+    tint: isDark ? 'rgba(16,16,16,0.18)' : 'rgba(255,255,255,0.20)',
     rim: isDark ? 'rgba(255,255,255,0.22)' : 'rgba(255,255,255,0.95)',
     sheenTop: isDark ? 'rgba(255,255,255,0.28)' : 'rgba(255,255,255,0.95)',
     pillFill: isDark ? 'rgba(255,255,255,0.16)' : 'rgba(255,255,255,0.62)',
@@ -132,7 +132,7 @@ function FloatingTabBar({ state, descriptors, navigation }: any) {
   ).current;
 
   return (
-    <View style={[navStyles.barWrapper, { bottom: 24 + insets.bottom }]} pointerEvents="box-none">
+    <View style={[navStyles.barWrapper, { bottom: TAB_BAR_BOTTOM_OFFSET + insets.bottom }]} pointerEvents="box-none">
       <View style={navStyles.barShadow}>
         <View
           style={[navStyles.bar, { borderColor: glass.rim }]}
@@ -140,8 +140,9 @@ function FloatingTabBar({ state, descriptors, navigation }: any) {
           {...panResponder.panHandlers}
         >
           <BlurView
+            pointerEvents="none"
+            intensity={isDark ? 55 : 65}
             tint={isDark ? 'dark' : 'light'}
-            intensity={60}
             experimentalBlurMethod="dimezisBlurView"
             style={StyleSheet.absoluteFill}
           />
@@ -166,12 +167,6 @@ function FloatingTabBar({ state, descriptors, navigation }: any) {
                 },
               ]}
             >
-              <BlurView
-                tint={isDark ? 'light' : 'light'}
-                intensity={isDark ? 24 : 40}
-                experimentalBlurMethod="dimezisBlurView"
-                style={[StyleSheet.absoluteFill, { borderRadius: navStyles.pill.borderRadius }]}
-              />
               <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: glass.pillFill, borderRadius: navStyles.pill.borderRadius }]} />
               <LinearGradient
                 pointerEvents="none"
@@ -225,7 +220,7 @@ const navStyles = {
     flexDirection: 'row' as const,
     alignItems: 'center' as const,
     width: '100%' as const,
-    height: 80,
+    height: TAB_BAR_HEIGHT,
     paddingVertical: 6,
     borderRadius: radius.pill,
     borderWidth: 1.5,
@@ -289,8 +284,11 @@ function Tabs() {
 }
 
 export default function RootNavigator() {
+  const { colors } = useThemeMode();
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator
+      screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.surface } }}
+    >
       <Stack.Screen name="Tabs" component={Tabs} />
       <Stack.Screen name="WorkoutSplit" component={WorkoutSplitScreen} />
       <Stack.Screen name="ArnoldSplit" component={ArnoldSplitScreen} />

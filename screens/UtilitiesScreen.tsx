@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import IronHeader from '../components/IronHeader';
 import ScrollFloat from '../components/ScrollFloat';
 import { useThemeMode } from '../hooks/useThemeMode';
+import { useTabBarClearance } from '../hooks/useTabBarClearance';
 import { makeCalcStyles } from './calculators/shared';
 
 const CALCULATORS: {
@@ -22,12 +23,16 @@ const CALCULATORS: {
 export default function UtilitiesScreen() {
   const { colors } = useThemeMode();
   const styles = useMemo(() => makeCalcStyles(colors), [colors]);
+  const tabBarClearance = useTabBarClearance();
   const navigation = useNavigation<any>();
 
   return (
     <View style={styles.screen}>
       <IronHeader title="GYMCOM" />
-      <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={[styles.content, { paddingBottom: tabBarClearance }]}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.pageHeader}>
           <ScrollFloat textStyle={styles.pageTitle} duration={1200} distance={20} stagger={0.045}>
             UTILITIES

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, ImageBackground, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, ImageBackground, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import IronHeader from '../components/IronHeader';
@@ -8,6 +8,7 @@ import { darkColors, typography, spacing, radius } from '../theme';
 import { useThemeMode } from '../hooks/useThemeMode';
 import { getExerciseImage } from '../data/exerciseImages';
 import { useWeightUnitPreference } from '../hooks/useWeightUnitPreference';
+import { onlyDigits } from './calculators/shared';
 
 type ExecutionParams = {
   name?: string;
@@ -97,9 +98,9 @@ export default function WorkoutExecutionScreen() {
   };
 
   return (
-    <View style={styles.screen}>
+    <KeyboardAvoidingView style={styles.screen} behavior="padding">
       <IronHeader title="GYMCOM" showBack onBackPress={() => navigation.goBack()} />
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
         <ImageBackground
           source={{ uri: getExerciseImage(exerciseName) }}
           style={styles.hero}
@@ -169,7 +170,7 @@ export default function WorkoutExecutionScreen() {
                       keyboardType="number-pad"
                       keyboardAppearance="dark"
                       value={weight}
-                      onChangeText={setWeight}
+                      onChangeText={(v) => setWeight(onlyDigits(v))}
                       placeholder="0"
                       placeholderTextColor={colors.surfaceContainerHighest}
                     />
@@ -182,7 +183,7 @@ export default function WorkoutExecutionScreen() {
                     keyboardType="number-pad"
                     keyboardAppearance="dark"
                     value={reps}
-                    onChangeText={setReps}
+                    onChangeText={(v) => setReps(onlyDigits(v))}
                     placeholder="0"
                     placeholderTextColor={colors.surfaceContainerHighest}
                   />
@@ -233,7 +234,7 @@ export default function WorkoutExecutionScreen() {
           <Text style={styles.completeBtnText}>COMPLETE EXERCISE</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 

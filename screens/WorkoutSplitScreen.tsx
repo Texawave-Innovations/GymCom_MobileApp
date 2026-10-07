@@ -9,8 +9,6 @@ import {
   Animated,
   Easing,
   LayoutAnimation,
-  Platform,
-  UIManager,
   Dimensions,
   NativeSyntheticEvent,
   NativeScrollEvent,
@@ -27,10 +25,6 @@ import { useThemeMode } from '../hooks/useThemeMode';
 import { PPL_SPLIT, PPL_NOTES, type PPLExercise, type PPLDay } from '../data/pplSplit';
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
-
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-}
 
 const HERO_IMAGE = 'https://images.pexels.com/photos/14599070/pexels-photo-14599070.jpeg';
 
@@ -396,8 +390,8 @@ const makeStyles = (colors: ReturnType<typeof useThemeMode>['colors']) => StyleS
   dayTitle: { ...typography.headlineMd, fontSize: 17, color: colors.onSurface, textTransform: 'uppercase' },
   dayFocus: { ...typography.bodyMd, fontSize: 12, color: colors.onSurfaceVariant, marginTop: 2 },
   dayBody: { paddingHorizontal: 16, paddingBottom: 16, borderTopWidth: 1, borderTopColor: colors.secondaryContainer },
-  restNoteRow: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingTop: 12, paddingBottom: 6 },
-  restNoteText: { ...typography.labelCaps, fontSize: 10, color: colors.onSurfaceVariant },
+  restNoteRow: { flexDirection: 'row', alignItems: 'flex-start', gap: 6, paddingTop: 12, paddingBottom: 6 },
+  restNoteText: { ...typography.labelCaps, fontSize: 10, color: colors.onSurfaceVariant, flex: 1, flexShrink: 1 },
   restDayBox: { alignItems: 'center', gap: 10, paddingVertical: 24 },
   restDayText: { ...typography.bodyMd, color: colors.onSurfaceVariant, textAlign: 'center', paddingHorizontal: 12, lineHeight: 20 },
 

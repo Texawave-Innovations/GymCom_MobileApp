@@ -8,6 +8,7 @@ import IronHeader from '../components/IronHeader';
 import ScrollFloat from '../components/ScrollFloat';
 import { typography, spacing, radius } from '../theme';
 import { useThemeMode } from '../hooks/useThemeMode';
+import { useTabBarClearance } from '../hooks/useTabBarClearance';
 import { PPL_SPLIT } from '../data/pplSplit';
 import { getTodaysLesson } from '../data/ironLessons';
 
@@ -22,13 +23,14 @@ export default function HomeScreen() {
   const navigation = useNavigation<any>();
   const { colors } = useThemeMode();
   const styles = useMemo(() => makeStyles(colors), [colors]);
+  const tabBarClearance = useTabBarClearance();
   const todaysDay = getTodaysSplitDay();
   const todaysLesson = getTodaysLesson();
 
   return (
     <View style={styles.screen}>
       <IronHeader />
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView contentContainerStyle={[styles.content, { paddingBottom: tabBarClearance }]}>
         <View style={styles.hero}>
           <Image
             source={require('../assets/hero-page.jpg')}
@@ -79,29 +81,6 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        <View style={[styles.section, { paddingHorizontal: spacing.marginMobile }]}>
-          <Text style={styles.sectionTitle}>YOUR PROGRESS</Text>
-          <View style={styles.statsGrid}>
-            <View style={styles.statBlock}>
-              <Text style={styles.statLabel}>Current Streak</Text>
-              <Text style={[styles.statNum, { color: colors.primary }]}>12</Text>
-              <Text style={styles.statLabel}>Days</Text>
-            </View>
-            <View style={styles.statBlock}>
-              <Text style={styles.statLabel}>Workouts</Text>
-              <Text style={styles.statNum}>48</Text>
-              <Text style={styles.statLabel}>This Year</Text>
-            </View>
-            <View style={[styles.statBlock, { flexBasis: '100%' }]}>
-              <Text style={styles.statLabel}>Recent PR</Text>
-              <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 4 }}>
-                <Text style={[styles.statNum, { color: colors.primary }]}>225</Text>
-                <Text style={styles.statLabel}>LBS</Text>
-              </View>
-              <Text style={styles.statLabel}>Bench Press</Text>
-            </View>
-          </View>
-        </View>
       </ScrollView>
     </View>
   );
@@ -109,7 +88,7 @@ export default function HomeScreen() {
 
 const makeStyles = (colors: ReturnType<typeof useThemeMode>['colors']) => StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.surfaceContainerLowest },
-  content: { paddingBottom: spacing.stackLg },
+  content: {},
   hero: { width: '100%', height: 520, justifyContent: 'flex-end', overflow: 'hidden' },
   heroContent: { padding: spacing.marginMobile, gap: spacing.stackSm },
   heroTitle: { ...typography.displayXl, fontSize: 34, lineHeight: 38, color: colors.primary, textTransform: 'uppercase' },
@@ -141,14 +120,4 @@ const makeStyles = (colors: ReturnType<typeof useThemeMode>['colors']) => StyleS
   sectionTitle: { ...typography.headlineMd, color: colors.onSurface, textTransform: 'uppercase' },
   lessonCard: { backgroundColor: colors.surfaceContainer, borderWidth: 1, borderColor: colors.outlineVariant, borderRadius: radius.md, padding: spacing.stackMd },
   lessonBody: { ...typography.bodyMd, color: colors.onSurfaceVariant, marginTop: 8 },
-  statsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 2, backgroundColor: colors.outlineVariant, borderRadius: radius.md, overflow: 'hidden' },
-  statBlock: {
-    flexBasis: '49.5%',
-    backgroundColor: colors.surfaceContainerLowest,
-    paddingVertical: spacing.gutter,
-    alignItems: 'center',
-    gap: 4,
-  },
-  statLabel: { ...typography.labelCaps, color: colors.onSurfaceVariant },
-  statNum: { ...typography.statsNum, color: colors.onSurface },
 });
